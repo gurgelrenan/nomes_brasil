@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 const SearchData = () => {
   const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({ res: [] });
   const [loading, setLoading] = useState(false);
   const [currentName, setCurrentName] = useState("");
 
@@ -22,11 +22,13 @@ const SearchData = () => {
         method: "GET",
         url: `https://servicodados.ibge.gov.br/api/v2/censos/nomes/${searchName}`
       }).then((response) => {
-        setData(response.data[0]);
+        const responseData = response.data[0];
+        setData(responseData || { res: [] });
         setCurrentName(searchName);
         setLoading(false);
       }).catch((error) => {
         console.error('Erro ao buscar dados:', error);
+        setData({ res: [] });
         setLoading(false);
       });
     }
